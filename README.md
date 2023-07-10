@@ -17,3 +17,6 @@ study spring data jpa
 `- JpaRepository`  
  - JpaRepository를 상속받은 interface는 Spring Data Jpa가 구현체를 Proxy 객체로 생성하여 injection 함
  - Repository <- CrudRepository <- PagingAndSortingRepository <- JpaRepository
+
+`- Query Creation`   
+ - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation  
