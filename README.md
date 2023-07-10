@@ -15,4 +15,4 @@ study spring data jpa
  - Entity 객체만 생각하면 private로 설정해도 문제 없으나 지연로딩과 그를 위한 Proxy 객체를 고려하면 protected로 설정하여 Entity 객체를 상속받는 Proxy 객체에서 부모의 생성자로 접근이 가능하도록 하여야 함  
 
 `- JpaRepository`  
- - JpaRepository를 상속받은 interface는 Spring Data Jpa가 Proxy 객체로 생성하여 내부적으로 구현체를 생성함  
+\- JpaRepository를 상속받은 interface는 Spring Data Jpa가 구현체를 Proxy 객체로 생성하여 injection 함
