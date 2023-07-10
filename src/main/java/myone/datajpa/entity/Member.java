@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,6 +21,9 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "username", "age"})
+@NamedQueries({
+    @NamedQuery(name = "Member.findByNamedQuery", query = "select m from Member m left join fetch m.team where m.username = :username")
+})
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,10 +46,9 @@ public class Member {
 		this.team = team;
 	}
 
-	public void changeMember(Member m) {
-		this.username = m.getUsername();
-		this.age = m.getAge();
-		this.team = m.getTeam();
+	public void changeMember(String username, int age) {
+		this.username = username;
+		this.age = age;
 	}
 	
 	public void applyTeam(Team t) {
