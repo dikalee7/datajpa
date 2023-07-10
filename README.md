@@ -24,5 +24,6 @@ study spring data jpa
 `- @NamedQuery`   
  - Entity 객체에 정의 하여 사용
  - JPQL을 미리 정의 하여 두고 지정한 name으로 호출하여 사용함
- - Spring Data Jpa에서는 repository interface에서 @Query의 name 속성에 해당 @NamedQuery name 값을 적용하여 호출
+ - Spring Data Jpa에서는 Repository interface에서 @Query의 name 속성에 해당 @NamedQuery name 값을 적용하여 호출
+ - @NamedQuery의 name을 EntityClassName.RepositoryMethodName 으로 명명한 경우 Repository interface의 @Query 어노테이션을 생략하여도 됨
  - 여러개의 @NamedQuery 적용을 위해서는 @NamedQueries 이용
