@@ -19,4 +19,10 @@ study spring data jpa
  - Repository <- CrudRepository <- PagingAndSortingRepository <- JpaRepository
 
 `- Query Creation`   
- - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation  
+ - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
+
+`- @NamedQuery`   
+ - Entity 객체에 정의 하여 사용
+ - JPQL을 미리 정의 하여 두고 지정한 name으로 호출하여 사용함
+ - Spring Data Jpa에서는 repository interface에서 @Query의 name 속성에 해당 @NamedQuery name 값을 적용하여 호출
+ - 여러개의 @NamedQuery 적용을 위해서는 @NamedQueries 이용
