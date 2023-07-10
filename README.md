@@ -38,3 +38,8 @@ study spring data jpa
 @Query("select m From Member m where m.username = :username and m.age = :age")
 List<Member> findQueryMember(@Param("username") String username, @Param("age") int age);
 ```
+```
+//dto로 결과를 받을 경우 new사용하여 패키지경로까지 모두 적어주어야 
+@Query("select new myone.datajpa.dto.MemberDto(m.id, m.username, t.name) from Member m join m.team t")
+List<MemberDto> findMemberDto();
+```
