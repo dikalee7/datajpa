@@ -29,3 +29,12 @@ study spring data jpa
  - 여러개의 @NamedQuery 적용을 위해서는 @NamedQueries 이용
  - 하지만 실무에서는 Entity 객체에 선언하여 사용하는 @NamedQuery 기능은 거의 사용하지 않음
  - Spring Data Jpa에서 Repository interface에서 직접 JPQL 작성하여 사용하는 @Query 어노테이션 이용함
+
+`- @Query`  
+ - Repository interface 메소드에 직접 적용
+ - parameter는 @Param으로 받을 수 있음
+ - em.createQuery를 이용하여 호출하는 JPQL은 문자열로 사전 검증되지 않으나 @NamedQuery와 @Query는 JPQL 쿼리문이 어플리케이션 구동시 검증됨
+```
+@Query("select m From Member m where m.username = :username and m.age = :age")
+List<Member> findQueryMember(@Param("username") String username, @Param("age") int age);
+```
