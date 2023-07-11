@@ -136,12 +136,13 @@ class MemberRepositoryTest {
 		PageRequest pr = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "username"));
 		Page<Member> findByPage = memberRepository.findByAge(10, pr);
 		Page<MemberDto> memberDtoPage = findByPage.map( member -> 
-			new MemberDto(member.getId(), member.getUsername(), Optional.ofNullable(member.getTeam()).isPresent()?member.getTeam().getName():null)
+			new MemberDto(member.getId(), member.getUsername(), Optional.ofNullable(member.getTeam()).orElseGet(()-> Team.createTeam().build()).getName())
 		);
 		
 		List<MemberDto> content = memberDtoPage.getContent();
 		long totalElements = memberDtoPage.getTotalElements();
 		int totalPages = memberDtoPage.getTotalPages();
+		System.out.println(content);
 		content.forEach(m -> {
 			System.out.println(m.getUsername());
 		});
