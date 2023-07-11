@@ -91,30 +91,7 @@ org.springframework.data.domain.Pageable : 페이징 기능(내부에 Sort포함
 ```
  - 반환타입
 ```
-> org.springframework.data.domain.page : count 쿼리 결과를 포함하는 페이징  
-> org.springframework.data.domain.Slice : count 쿼리 없이 다음 페이지만 확인 가능(내부적으로 limit + 1 조회)
-> List : count 쿼리 없이 결과만 반환
-```
- - count query 분리
-```
-//countQuery를 별도 지정하지 않으면 Entity 연관관계로 인해 불필요한 Join 발생하여 성능에 영향을 줌
-@Query( value = "select m from Member m left join fetch m.team where m.age = :age",
-        countQuery = "select count(m.username) from Member m where m.age = :age")
-Page<Member> findByAge(@Param("age") int age, Pageable pageable);
-```
-<br>
-
-
-> 벌크성 수정
- - @Query 이용하여 처리함
- - 단, 반드시 @Modifying을 함께 사용하여야 함
-```
-@Modifying
-@Query("update Member m set m.age = m.age + 1 where m.age >= :age")
-int bulkAgePlus(@Param("age") int age);
-```
- - `주의사항` 벌크 쿼리는 JPA의 영속성 컨텍스트를 무시하고 직접 DB에 반영되므로 벌크 프로세스 처리 시 영속성 컨텍스트 초기화 해주어야 한다.
- - @Modifying(clearAutomatically = true)
+> org.springframework.dat정
 ```
 @Modifying(clearAutomatically = true)
 @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
