@@ -3,23 +3,34 @@
 
 > gradle 의존관계 보기  
 > ./gradlew dependencies --configuration compileClasspath    
+<br>
 
 > Assertj  
 > https://joel-costigliola.github.io/assertj/index.html  
+<br>
+
 
 > JPA Entity에 기본 생성자가 필요한 이유   
  - 데이터를 DB에서 조회해 온 뒤 객체를 생성할 때 Java Reflection을 사용
  - Reflection은 클래스 이름만 알면 생성자, 필드, 메서드 등 클래스의 모든 정보에 접근이 가능 하지만 생성자의 매개변수는 알 수 없기때문에 기본 생성자로 객체를 생성하고 필드 값을 강제로 매핑해주는 방식을 사용
+<br>
+
 
 > JPA Entity에 기본 생성자는 protected로 설정     
  - Entity 객체만 생각하면 private로 설정해도 문제 없으나 지연로딩과 그를 위한 Proxy 객체를 고려하면 protected로 설정하여 Entity 객체를 상속받는 Proxy 객체에서 부모의 생성자로 접근이 가능하도록 하여야 함  
+<br>
+
 
 > JpaRepository  
  - JpaRepository를 상속받은 interface는 Spring Data Jpa가 구현체를 Proxy 객체로 생성하여 injection 함
  - Repository <- CrudRepository <- PagingAndSortingRepository <- JpaRepository
+<br>
+
 
 > Query Creation  
 > https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
+<br>
+
 
 > @NamedQuery   
  - Entity 객체에 정의 하여 사용
@@ -29,6 +40,8 @@
  - 여러개의 @NamedQuery 적용을 위해서는 @NamedQueries 이용
  - 하지만 실무에서는 Entity 객체에 선언하여 사용하는 @NamedQuery 기능은 거의 사용하지 않음
  - Spring Data Jpa에서 Repository interface에서 직접 JPQL 작성하여 사용하는 @Query 어노테이션 이용함
+<br>
+
 
 > @Query  
  - Repository interface 메소드에 직접 적용
@@ -47,6 +60,8 @@ List<Member> findByNames(@Param("usernames") Collection<String> usernames);
 @Query("select new myone.datajpa.dto.MemberDto(m.id, m.username, t.name) from Member m join m.team t")
 List<MemberDto> findMemberDto();
 ```
+<br>
+
 
 > 유연한 반환타입 지정  
 > https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repository-query-return-types  
@@ -64,4 +79,19 @@ no result : null
 ```
 Optional<Member> findOptionalByUsername(String username); //단건 Optional
 no result : Optional.empty
+```
+<br>
+
+
+> 페이징과 정렬
+ - 파라미터
+```
+org.springframework.data.domain.Sort : 정렬기능  
+org.springframework.data.domain.Pageable : 페이징 기능(내부에 Sort포함)
+```
+ - 반환타입
+```
+> org.springframework.data.domain.page : count 쿼리 결과를 포함하는 페이징  
+> org.springframework.data.domain.Slice : count 쿼리 없이 다음 페이지만 확인 가능(내부적으로 limit + 1 조회)
+> List : count 쿼리 없이 결과만 반환
 ```
