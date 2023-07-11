@@ -133,7 +133,7 @@ int bulkAgePlus(@Param("age") int age);
 @EntityGraph(attributePaths = {"team"})
 List<Member> findAll();
 
-// @Query JPQL과 함께 적
+// @Query JPQL과 함께 적용
 @Query("select m from Member m")
 @EntityGraph(attributePaths = {"team"})
 List<Member> findAllMembers();
