@@ -113,3 +113,17 @@ Page<Member> findByAge(@Param("age") int age, Pageable pageable);
 @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
 int bulkAgePlus(@Param("age") int age);
 ```
+ - `주의사항` 벌크 쿼리는 JPA의 영속성 컨텍스트를 무시하고 직접 DB에 반영되므로 벌크 프로세스 후에는 반드시 영속성 컨텍스트를 반영(EntityManager flush) 및 초기화(EntityManager clear) 해주어야 한다.
+```
+@Test
+void bulkUpdate() {
+  initData();
+  Member addMember = Member.createMember().username("add kim").age(20).build();
+  memberRepository.save(addMember);
+  memberRepository.bulkAgePlus(20);
+  em.flush();
+  em.clear();
+  Member member = memberRepository.findOptionalByUsername("add kim").orElseThrow(MoBusinessException::new);
+  assertThat(member.getAge()).isEqualTo(21);
+}
+```
