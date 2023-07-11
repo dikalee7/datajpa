@@ -1,8 +1,5 @@
 package myone.datajpa;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -35,6 +32,12 @@ class MemberJpaRepositoryTest {
 		findByPage.forEach(m -> {
 			System.out.println(m.getUsername());
 		});
+	}
+	
+	@Test
+	void bulkUpdate() {
+		initData();
+		memberJpaRepository.bulkAgePlus(20);
 	}
 	
 	private void initData() {

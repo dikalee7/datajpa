@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import myone.datajpa.common.MoBusinessException;
 import myone.datajpa.dto.MemberDto;
 import myone.datajpa.entity.Member;
 import myone.datajpa.entity.Team;
@@ -148,6 +149,18 @@ class MemberRepositoryTest {
 		});
 		System.out.println("totalElements == " + totalElements);
 		System.out.println("totalPages == " + totalPages);
+	}
+	
+	@Test
+	void bulkUpdate() {
+		initData();
+		Member addMember = Member.createMember().username("add kim").age(20).build();
+		memberRepository.save(addMember);
+		memberRepository.bulkAgePlus(20);
+		em.flush();
+		em.clear();
+		Member member = memberRepository.findOptionalByUsername("add kim").orElseThrow(MoBusinessException::new);
+		assertThat(member.getAge()).isEqualTo(21);
 	}
 	
 	private void initData() {
