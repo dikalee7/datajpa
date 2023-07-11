@@ -114,7 +114,7 @@ Page<Member> findByAge(@Param("age") int age, Pageable pageable);
 int bulkAgePlus(@Param("age") int age);
 ```
  - `주의사항` 벌크 쿼리는 JPA의 영속성 컨텍스트를 무시하고 직접 DB에 반영되므로 벌크 프로세스 처리 시 영속성 컨텍스트 초기화 해주어야 한다.
- - @Modifying(clearAutomatically = true)
+ - @Modifying의 clearAutomatically속성을 true로 설정
 ```
 @Modifying(clearAutomatically = true)
 @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
