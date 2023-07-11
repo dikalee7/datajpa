@@ -128,7 +128,12 @@ int bulkAgePlus(@Param("age") int age);
  - attributePaths 속송에 fetch join 대상 정의
  - left join으로 제공되며 inner join 설정은 불가능
 ```
-// @Query JPQL과 함께 사용
+// 기존에 제공되는 메서드를 override 하여 적용
+@Override
+@EntityGraph(attributePaths = {"team"})
+List<Member> findAll();
+
+// @Query JPQL과 함께 적
 @Query("select m from Member m")
 @EntityGraph(attributePaths = {"team"})
 List<Member> findAllMembers();
