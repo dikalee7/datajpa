@@ -134,10 +134,14 @@ int bulkAgePlus(@Param("age") int age);
 List<Member> findAllMembers();
 ```
 > @NamedEntityGraph  
- - @NamedQuery와 마찬가지로 Entity에 정의 하여 사용  
+ - @NamedQuery와 마찬가지로 Entity에 정의 하여 사용하지만 실무에서는 많이 사용하지 않는다.
 ```
 @NamedEntityGraph(name = "Member.findAllMembers", attributeNodes = @NamedAttributeNode("team"))
 public class Member {
   ...(생략)...
 }
+
+@Query("select m from Member m")
+@EntityGraph("Member.findAllMembers")
+List<Member> findAllMembers();
 ```
