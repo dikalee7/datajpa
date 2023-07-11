@@ -133,3 +133,11 @@ int bulkAgePlus(@Param("age") int age);
 @EntityGraph(attributePaths = {"team"})
 List<Member> findAllMembers();
 ```
+> @NamedEntityGraph  
+ - @NamedQuery와 마찬가지로 Entity에 정의 하여 사용  
+```
+@NamedEntityGraph(name = "Member.findAllMembers", attributeNodes = @NamedAttributeNode("team"))
+public class Member {
+  ...(생략)...
+}
+```
