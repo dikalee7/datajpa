@@ -95,3 +95,8 @@ org.springframework.data.domain.Pageable : 페이징 기능(내부에 Sort포함
 > org.springframework.data.domain.Slice : count 쿼리 없이 다음 페이지만 확인 가능(내부적으로 limit + 1 조회)
 > List : count 쿼리 없이 결과만 반환
 ```
+ - count query 분리
+```
+@Query(value = "select m from Member m left join m.team", countQuery = "select count(m.username) from Member m")
+Page<Member> findByAge(int age, Pageable pageable);
+```
