@@ -2,11 +2,9 @@ package myone.datajpa;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -79,7 +77,7 @@ class MemberRepositoryTest {
 	}
 	
 	@Test
-	void fetchJoinTest() {
+	void fetchJoin() {
 		initData();
 		
 		// fetch join list
@@ -161,6 +159,18 @@ class MemberRepositoryTest {
 		assertThat(member.getAge()).isEqualTo(21);
 	}
 	
+	@Test
+	void fetchJoinTest() {
+		initData();
+		List<Member> findMemberFetchJoin = memberRepository.findAllMembers();
+		
+		for (Member member : findMemberFetchJoin) {
+			System.out.println(member);
+			System.out.println(Optional.ofNullable(member.getTeam()).orElseGet(()->Team.createTeam().build()).getName());
+			System.out.println("===================================");
+		}
+	}
+	
 	private void initData() {
 		// 팀 등록
 		registTeam();
@@ -185,7 +195,7 @@ class MemberRepositoryTest {
 	private void registMember() {
 		Team teamA = teamRepository.findByName("teamA").get();
 		Team teamB = teamRepository.findByName("teamB").get();
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			Member smember1 = Member.createMember().username("member1_"+String.format("%04d", i)).age(10).build();
 			smember1.applyTeam(teamA);
 			memberRepository.save(smember1);
@@ -197,12 +207,12 @@ class MemberRepositoryTest {
 		}
 		
 		Member member1 = Member.createMember().username("member1").age(10).build();
-		memberRepository.save(member1);
 		member1.applyTeam(teamA);
-
+		memberRepository.save(member1);
+		
 		Member member2 = Member.createMember().username("member2").age(5).build();
-		memberRepository.save(member2);
 		member2.applyTeam(teamA);
+		memberRepository.save(member2);
 		
 		Member member2_1 = Member.createMember().username("member2_1").age(10).build();
 		memberRepository.save(member2_1);		

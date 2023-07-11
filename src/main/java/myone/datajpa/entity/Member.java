@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -24,6 +26,7 @@ import lombok.ToString;
 @NamedQueries({
     @NamedQuery(name = "Member.findByNamedQuery", query = "select m from Member m left join fetch m.team where m.username = :username")
 })
+@NamedEntityGraph(name = "Member.findAllMembers", attributeNodes = @NamedAttributeNode("team"))
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
