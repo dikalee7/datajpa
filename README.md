@@ -35,8 +35,12 @@ study spring data jpa
  - parameter는 @Param으로 받을 수 있음
  - em.createQuery를 이용하여 호출하는 JPQL은 문자열로 사전 검증되지 않으나 @NamedQuery와 @Query는 JPQL 쿼리문이 어플리케이션 구동시 검증됨
 ```
+//parameter 예시
 @Query("select m From Member m where m.username = :username and m.age = :age")
 List<Member> findQueryMember(@Param("username") String username, @Param("age") int age);
+
+@Query("select m from Member m where m.username in :usernames")
+List<Member> findByNames(@Param("usernames") Collection<String> usernames);
 ```
 ```
 //dto로 결과를 받을 경우 new사용하여 패키지경로까지 모두 적어주어야 
