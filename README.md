@@ -102,3 +102,14 @@ org.springframework.data.domain.Pageable : 페이징 기능(내부에 Sort포함
         countQuery = "select count(m.username) from Member m where m.age = :age")
 Page<Member> findByAge(@Param("age") int age, Pageable pageable);
 ```
+<br>
+
+
+> 벌크성 수정
+ - @Query 이용하여 처리함
+ - 단, 반드시 @Modifying을 함께 사용하여야 함
+```
+@Modifying
+@Query("update Member m set m.age = m.age + 1 where m.age >= :age")
+int bulkAgePlus(@Param("age") int age);
+```
