@@ -1,11 +1,11 @@
 # study spring data jpa 
 
 
-> gradle 의존관계 보기
- - ./gradlew dependencies --configuration compileClasspath    
+> gradle 의존관계 보기  
+> ./gradlew dependencies --configuration compileClasspath    
 
 > Assertj  
- - https://joel-costigliola.github.io/assertj/index.html  
+> https://joel-costigliola.github.io/assertj/index.html  
 
 > JPA Entity에 기본 생성자가 필요한 이유   
  - 데이터를 DB에서 조회해 온 뒤 객체를 생성할 때 Java Reflection을 사용
@@ -18,8 +18,8 @@
  - JpaRepository를 상속받은 interface는 Spring Data Jpa가 구현체를 Proxy 객체로 생성하여 injection 함
  - Repository <- CrudRepository <- PagingAndSortingRepository <- JpaRepository
 
-> Query Creation   
- - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
+> Query Creation  
+> https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
 
 > @NamedQuery   
  - Entity 객체에 정의 하여 사용
@@ -49,6 +49,7 @@ List<MemberDto> findMemberDto();
 ```
 
 > 유연한 반환타입 지정  
+> https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repository-query-return-types  
  - 컬렉션
 ```
 List<Member> findListByUsername(String username);
