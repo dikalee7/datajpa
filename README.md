@@ -1,4 +1,4 @@
-# study spring data jpa 
+# Spring data jpa 
 
 
 > gradle 의존관계 보기  
