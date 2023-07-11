@@ -121,3 +121,15 @@ int bulkAgePlus(@Param("age") int age);
 @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
 int bulkAgePlus(@Param("age") int age);
 ```
+<br>
+
+> @EntityGraph  
+ - Fetch join 어노테이션
+ - attributePaths 속송에 fetch join 대상 정의
+ - 기본이 left outer join
+```
+// @Query JPQL과 함께 사용
+@Query("select m from Member m")
+@EntityGraph(attributePaths = {"team"})
+List<Member> findAllMembers();
+```
