@@ -157,8 +157,6 @@ class MemberRepositoryTest {
 		Member addMember = Member.createMember().username("add kim").age(20).build();
 		memberRepository.save(addMember);
 		memberRepository.bulkAgePlus(20);
-		em.flush();
-		em.clear();
 		Member member = memberRepository.findOptionalByUsername("add kim").orElseThrow(MoBusinessException::new);
 		assertThat(member.getAge()).isEqualTo(21);
 	}
