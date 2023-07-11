@@ -98,6 +98,7 @@ org.springframework.data.domain.Pageable : 페이징 기능(내부에 Sort포함
  - count query 분리
 ```
 //countQuery를 별도 지정하지 않으면 Entity 연관관계로 인해 불필요한 Join 발생하여 성능에 영향을 줌
-@Query(value = "select m from Member m left join m.team", countQuery = "select count(m.username) from Member m")
-Page<Member> findByAge(int age, Pageable pageable);
+@Query( value = "select m from Member m left join fetch m.team where m.age = :age",
+        countQuery = "select count(m.username) from Member m where m.age = :age")
+Page<Member> findByAge(@Param("age") int age, Pageable pageable);
 ```
