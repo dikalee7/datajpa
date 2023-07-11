@@ -126,7 +126,7 @@ int bulkAgePlus(@Param("age") int age);
 > @EntityGraph  
  - Fetch join 어노테이션
  - attributePaths 속송에 fetch join 대상 정의
- - 기본이 left outer join
+ - left join으로 제공되며 inner join 설정은 불가능
 ```
 // @Query JPQL과 함께 사용
 @Query("select m from Member m")
