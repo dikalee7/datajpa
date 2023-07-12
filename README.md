@@ -165,7 +165,7 @@ List<Member> findAllMembers();
       @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
       Optional<Member> findMemberReadonlyById(Long id);
       ```
-   2. Lock
+   2. Lock (JPALOCK.md)
 
       |락 모드|타입|설명|
       |------|---|---|
