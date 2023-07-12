@@ -73,6 +73,8 @@
   - 데이터베이스 대부분 방언에 의해 PESSIMISTIC_WRITE로 동작
 - PESSIMISTIC_FORCE_INCREMENT
   - 비관적 락중 유일하게 버전 정보를 사용
+  - 때문에 Entity에 version을 위한 필드를 (@Version) 두지 않으면 오류 발생
+    - org.hibernate.AssertionFailure: cannot force version increment on non-versioned entity
 - 타임 아웃
   - 비관적 락 사용 시 락을 위한 트랜잭션 무한 대기를 방지하기 위해 설정
   ```
