@@ -162,7 +162,7 @@ class MemberRepositoryTest {
 	@Test
 	void fetchJoinTest() {
 		initData();
-		List<Member> findMemberFetchJoin = memberRepository.findAllMembers();
+		List<Member> findMemberFetchJoin = memberRepository.findAll();
 		
 		for (Member member : findMemberFetchJoin) {
 			System.out.println(member);
@@ -170,6 +170,44 @@ class MemberRepositoryTest {
 			System.out.println("===================================");
 		}
 	}
+	
+	@Test
+	void jpaHintId() {
+		Member member = Member.createMember()
+				.username("jpahint")
+				.age(15)
+				.build();
+		Member saveMember = memberRepository.save(member);
+		em.flush();
+		em.clear();
+		
+		Member findMember = memberRepository.findMemberReadonlyById(saveMember.getId())
+				.orElseThrow(() -> new MoBusinessException("There is no member!!!"));
+		
+		assertThat(findMember.getId()).isEqualTo(saveMember.getId());
+		
+		findMember.changeMember("readonly", findMember.getAge());
+		em.flush();
+	}
+	
+	@Test
+	void versionTest() {
+		Team team = Team.createTeam().name("marketing").build();
+		teamRepository.save(team);
+		Member member = Member.createMember()
+				.username("jpalock")
+				.age(15)
+				.build();
+//		member.applyTeam(team);
+		Member saveMember = memberRepository.save(member);
+		em.flush();
+		em.clear();
+//		Member findMember = memberRepository.findById(saveMember.getId()).orElseThrow(() -> new MoBusinessException("There is no member!!!"));
+		Member findMember = memberRepository.findByIdForUpdate(saveMember.getId()).orElseThrow(() -> new MoBusinessException("There is no member!!!"));
+//		findMember.changeMember("jpalock1", findMember.getAge());
+		findMember.applyTeam(team);
+	}
+	
 	
 	private void initData() {
 		// 팀 등록

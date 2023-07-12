@@ -12,6 +12,7 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Version;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,6 +29,8 @@ import lombok.ToString;
 })
 @NamedEntityGraph(name = "Member.findAllMembers", attributeNodes = @NamedAttributeNode("team"))
 public class Member {
+	@Version
+    private int version;
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
