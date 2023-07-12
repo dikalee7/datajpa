@@ -229,7 +229,8 @@ List<Member> findAllMembers();
     }
     ```
     - Spring Data JPA의 경우 @CreatedBy, @CreatedDate, @LastModifiedBy, @LastModifiedDate 이용하여 구현
-    - @EntityListeners(AuditingEntityListener.class) 지정하여야함
+    - Spring Boot 구동 Class에 @EnableJpaAuditing 설정 필요
+    - Auditing Class에 @EntityListeners(AuditingEntityListener.class) 설정 필요
     ```
     @EntityListeners(AuditingEntityListener.class)
     @MappedSuperclass
