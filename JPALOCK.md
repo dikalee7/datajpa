@@ -44,3 +44,26 @@
   @Lock(LockModeType.OPTIMISTIC_FORCEJNCREMENT)
   Optional<Member> findByIdForUpdate(Long id);
   ```
+<br>
+
+> 비관적 락
+- 데이터베이스 트랜잭션 락 메커니즘에 의존하는 방식
+- PESSIMICTIC_WRITE
+  - 데이터베이스에 쓰기 락
+  - 데이터베이스 select for update를 사용
+  ```
+  @Query("select m from Member m")
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+  Optional<Member> findByIdForUpdate(Long id);
+
+  //호출되는 select문에 for update 붙음
+  select
+        member0_.member_id as member_i1_0_,
+        member0_.age as age2_0_,
+        member0_.team_id as team_id5_0_,
+        member0_.username as username3_0_,
+        member0_.version as version4_0_ 
+  from
+        member member0_ for update
+            of member0_
+  ```
