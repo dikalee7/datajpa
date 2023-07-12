@@ -19,8 +19,9 @@ import org.springframework.data.repository.query.Param;
 
 import myone.datajpa.dto.MemberDto;
 import myone.datajpa.entity.Member;
+import myone.datajpa.repository.custom.MemberRepositoryCustom;
 
-public interface MemberRepository extends JpaRepository<Member, Long>{
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom{
 	
 	@Query(value = "select m from Member m left join fetch m.team")
 	List<Member> findAllFetch();
