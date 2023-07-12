@@ -170,6 +170,7 @@ List<Member> findAllMembers();
 <br>
 
 > 사용자 정의 Repository 구현
+  - JpaRepository를 상속받은 interface만으로 구현이 불가능할때, 예를 들어 JDBC TEMPLATE이나 QueryDSL을 사용
   - JpaRepository를 상속받은 interface를 이용하여 구현하기에는 관련 모든 메소드를 override 해야하므로 적합하지 않음
   - 별도 interface를 만들고 해당 interface를 대상으로 구현체를 생성한 후에 JpaRespository와 함께 상속받는 것으로 처리함
     ```
