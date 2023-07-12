@@ -138,6 +138,8 @@ List<Member> findAll();
 @EntityGraph(attributePaths = {"team"})
 List<Member> findAllMembers();
 ```
+<br>
+
 > @NamedEntityGraph  
  - @NamedQuery와 마찬가지로 Entity에 정의 하여 사용하지만 실무에서는 많이 사용하지 않는다.
 ```
@@ -150,3 +152,17 @@ public class Member {
 @EntityGraph("Member.findAllMembers")
 List<Member> findAllMembers();
 ```
+<br>
+
+> JPA hint
+ - SQL hint가 아니라 JPA 구현체에게 제공하는 hint
+   1. Readonly
+      - JPA는 영속성 컨텍스트에 관리(after save or find)되는 Entity에 대해 `변경 감지` 기능을 제공한다.
+      - flush 하는 시점에 변경된 부분에 대해 update 쿼리를 발생시킨다.
+      - 이러한 기능을 제공하기 위해 비교할 수 있는 snapshot을 가지고 있는데, 이 또한 변경없이 조회만 하는 경우에는 불필요한 비용이며, 이때 사용되는 hint `org.hibernate.readOnly`
+      - 해당 hint를 사용하면 snapshot을 만들지 않는다.
+      ```
+      @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
+      Optional<Member> findMemberReadonlyById(Long id);
+      ```
+   2. Lock
