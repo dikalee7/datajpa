@@ -180,7 +180,7 @@ List<Member> findAllMembers();
 
     // 구현체 생성
     @RequiredArgsConstructor
-    public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
+    public class MemberRepositoryImpl implements MemberRepositoryCustom {
       private final EntityManager em;
       @Override
       public List<Member> findAllCustom() {
