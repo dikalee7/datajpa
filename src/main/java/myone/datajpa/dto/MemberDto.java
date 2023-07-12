@@ -1,12 +1,19 @@
 package myone.datajpa.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class MemberDto {
 	private Long id;
 	private String username;
-	private String TeamName;
+	private int age;
+	private String teamName;
+	
+	public MemberDto(Long id, String username, int age, String teamName) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.age = age;
+		this.teamName = teamName;
+	}
 }

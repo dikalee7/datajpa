@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import myone.datajpa.dto.MemberDto;
 import myone.datajpa.entity.Member;
 import myone.datajpa.entity.Team;
 import myone.datajpa.repository.MemberRepository;
@@ -36,7 +37,11 @@ public class MemberRepositoryCustomTest {
 	void customTest() {
 		initData();
 		
-		List<Member> findAllCustom = memberRepository.findAllCustom();
+//		List<Member> findAllCustom = memberRepository.findAllCustom();
+		List<MemberDto> findAllCustom = memberRepository.findAllJdbcTemplate();
+		
+		findAllCustom.forEach(member -> System.out.println(member));
+//		System.out.println(findAllCustom);
 		
 		assertThat(findAllCustom.size()).isEqualTo(30);
 	}
