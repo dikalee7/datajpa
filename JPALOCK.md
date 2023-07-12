@@ -67,3 +67,16 @@
         member member0_ for update
             of member0_
   ```
+- PESSIMICTIC_READ
+  - 데이터를 반복 읽기만 하고 수정하지 않는 용도
+  - 일반적으로 사용되지 않음
+  - 데이터베이스 대부분 방언에 의해 PESSIMISTIC_WRITE로 동작
+- PESSIMISTIC_FORCE_INCREMENT
+  - 비관적 락중 유일하게 버전 정보를 사용
+- 타임 아웃
+  - 비관적 락 사용 시 락을 위한 트랜잭션 무한 대기를 방지하기 위해 설정
+  ```
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+  @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="10000")})
+  Optional<Member> findForUpdateById(Long id);
+  ```
