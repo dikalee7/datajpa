@@ -228,3 +228,43 @@ List<Member> findAllMembers();
 	
     }
     ```
+    - Spring Data JPA의 경우 @CreatedBy, @CreatedDate, @LastModifiedBy, @LastModifiedDate 이용하여 구현
+    - @EntityListeners(AuditingEntityListener.class) 지정하여야함
+    ```
+    @EntityListeners(AuditingEntityListener.class)
+    @MappedSuperclass
+    @Getter
+    public class BaseTimeEntity {
+	
+	    @CreatedDate
+	    @Column(updatable = false)
+	    private LocalDateTime createDate;
+	
+	    @LastModifiedDate
+	    private LocalDateTime lastModifiedDate;
+	
+    }
+
+    @EntityListeners(AuditingEntityListener.class)
+
+    @MappedSuperclass
+    @Getter
+    public class BaseEntity extends BaseTimeEntity{
+	
+        @CreatedBy
+        @Column(updatable = false)
+        private String createBy;
+	
+        @LastModifiedBy
+        private String lastModifiedBy;
+	
+    }
+    ```
+    - @CreatedBy, @LastModifiedBy에 값을 담기 위해서는 AuditorAware Bean 등록하여야 함
+    - 아래 예시는 단순 샘플이며, 프로젝트안에서 구현되어 있는 User 세션값이 설정될 수 있도록 처리하여야 함
+    ```
+    @Bean
+    AuditorAware<String> auditorProvider() {
+        return () -> Optional.of(UUID.randomUUID().toString());
+    }
+    ```
