@@ -173,10 +173,12 @@ List<Member> findAllMembers();
   - JpaRepository를 상속받은 interface를 이용하여 구현하기에는 관련 모든 메소드를 override 해야하므로 적합하지 않음
   - 별도 interface를 만들고 해당 interface를 대상으로 구현체를 생성한 후에 JpaRespository와 함께 상속받는 것으로 처리함
     ```
+    // 사용자 interface 생성
     public interface MemberRepositoryCustom {
       List<Member> findAllCustom();
     }
 
+    // 구현체 생성
     @RequiredArgsConstructor
     public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
       private final EntityManager em;
@@ -184,6 +186,11 @@ List<Member> findAllMembers();
       public List<Member> findAllCustom() {
         return em.createQuery("select m From Member m left join fetch m.team", Member.class).getResultList();
       }
+    }
+
+    // 사용자 정의 interface 상속
+    public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
+      ...(중략)...
     }
     
     ```
