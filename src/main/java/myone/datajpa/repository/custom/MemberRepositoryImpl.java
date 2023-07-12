@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import myone.datajpa.entity.Member;
 
 @RequiredArgsConstructor
-public class MemberRepositoryCustomImpl implements MemberRepositoryCustom{
+public class MemberRepositoryImpl implements MemberRepositoryCustom{
 	
 	private final EntityManager em;
 	
