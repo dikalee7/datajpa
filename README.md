@@ -197,4 +197,34 @@ List<Member> findAllMembers();
     }
     
     ```
-    
+<br>
+
+>  Auditing
+  - Entity 공통 field에 대한 처리
+  - CreatedBy, CreatedDate, LastModifiedBy, LastModifiedDate
+  - Entitiy가 상속받아야 사용하여야 하므로 @MappedSuperclass로 지정
+    - 순수 JPA의 경우 @PrePersist, @PreUpdate 이용하여 구현함
+    ```
+    @MappedSuperclass
+    @Getter
+    public class JpaBaseEntity {
+	
+	    @Column(updatable = false)
+	    private LocalDateTime createDate;
+	    private LocalDateTime updateDate;
+	
+	    @PrePersist
+	    public void prePersist() {
+		    LocalDateTime now = LocalDateTime.now();
+		    this.createDate = now;
+		    this.updateDate = now;
+	    }
+	
+	    @PreUpdate
+	    public void preUpdate() {
+		    LocalDateTime now = LocalDateTime.now();
+		    this.updateDate = now;
+	    }
+	
+    }
+    ```
