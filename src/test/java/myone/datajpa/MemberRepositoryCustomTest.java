@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import myone.datajpa.common.MoBusinessException;
 import myone.datajpa.dto.MemberDto;
 import myone.datajpa.entity.Member;
 import myone.datajpa.entity.Team;
@@ -34,13 +35,22 @@ public class MemberRepositoryCustomTest {
 	EntityManager em;
 	
 	@Test
-	void customTest() {
+	void customTest() throws InterruptedException {
 		initData();
 		
 //		List<Member> findAllCustom = memberRepository.findAllCustom();
 		List<MemberDto> findAllCustom = memberRepository.findAllJdbcTemplate();
 		
-		findAllCustom.forEach(member -> System.out.println(member));
+		Thread.sleep(1000);
+		Member findMember = memberRepository.findById(findAllCustom.get(0).getId()).orElseThrow(
+				() -> new MoBusinessException("There is no member")
+				);
+		findMember.changeMember("update", findMember.getAge());
+		em.flush();
+		System.out.println("getCreateBy::"+findMember.getCreateBy());
+		System.out.println("getLastModifiedBy::"+findMember.getLastModifiedBy());
+		System.out.println("getCreateDate::"+findMember.getCreateDate());
+		System.out.println("getLastModifiedDate::"+findMember.getLastModifiedDate());
 //		System.out.println(findAllCustom);
 		
 		assertThat(findAllCustom.size()).isEqualTo(30);

@@ -28,7 +28,7 @@ import lombok.ToString;
     @NamedQuery(name = "Member.findByNamedQuery", query = "select m from Member m left join fetch m.team where m.username = :username")
 })
 @NamedEntityGraph(name = "Member.findAllMembers", attributeNodes = @NamedAttributeNode("team"))
-public class Member {
+public class Member extends BaseEntity{
 	@Version
     private int version;
 
