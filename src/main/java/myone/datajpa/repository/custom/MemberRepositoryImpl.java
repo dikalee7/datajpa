@@ -81,8 +81,6 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
 
 	@Override
 	public Page<MemberDto> findAllPageable(Pageable page) {
-//		Order order = !page.getSort().isEmpty() ? page.getSort().toList().get(0) : Order.by("ID");
-		
 		StringBuffer query = new StringBuffer();
 		query.append(" select");
 		query.append("  m.member_id as member_id,");
