@@ -1,11 +1,17 @@
 package myone.datajpa.repository.custom;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
 import lombok.RequiredArgsConstructor;
 import myone.datajpa.dto.MemberDto;
@@ -35,15 +41,54 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
         query.append(" left outer join team t");
         query.append("    on m.team_id=t.team_id");
         query.append(" ORDER BY member_id");
-		return this.jdbcTemplate.query(query.toString(), memberRowMapper());
+		return this.jdbcTemplate.query(query.toString(), (rs, rowNum) -> memberRowMapper(rs));
 		
 	}
 	
-	private RowMapper<MemberDto> memberRowMapper() {
-        return (rs, rowNum) -> {
+	private MemberDto memberRowMapper(final ResultSet  rs) throws NumberFormatException, SQLException {
         	MemberDto member = new MemberDto(Long.parseLong(rs.getString("member_id")), rs.getString("username"), rs.getInt("age"), rs.getString("team_name")); 
         	return member;
-        };
     }
 
+	@Override
+	public List<MemberDto> findAllJdbcTemplateSort(Sort sort) {
+		Order order = sort.toList().get(0);
+
+		StringBuffer query = new StringBuffer();
+		query.append(" select");
+		query.append("  m.member_id as member_id,");
+		query.append("  m.username as username,");
+		query.append("  m.age as age,");
+		query.append("  t.name as team_name");
+		query.append(" from member m");
+		query.append(" left outer join team t");
+		query.append("    on m.team_id=t.team_id");
+		query.append(" order by " + order.getProperty() + " " + order.getDirection().name());
+		return this.jdbcTemplate.query(query.toString(),
+				(rs, rowNum) -> new MemberDto(Long.parseLong(rs.getString("member_id")), rs.getString("username"),
+						rs.getInt("age"), rs.getString("team_name")));
+	}
+
+	@Override
+	public Page<MemberDto> findAllPageable(Pageable page) {
+		Order order = !page.getSort().isEmpty() ? page.getSort().toList().get(0) : Order.by("ID");
+		
+		StringBuffer query = new StringBuffer();
+		query.append(" select");
+		query.append("  m.member_id as member_id,");
+		query.append("  m.username as username,");
+		query.append("  m.age as age,");
+		query.append("  t.name as team_name");
+		query.append(" from member m");
+		query.append(" left outer join team t");
+		query.append("    on m.team_id=t.team_id");
+		query.append(" order by " + order.getProperty() + " " + order.getDirection().name() + " LIMIT " + page.getPageSize() + " OFFSET " + page.getOffset());
+		
+		
+		List<MemberDto> members = jdbcTemplate.query(query.toString(),
+				(rs, rowNum) -> new MemberDto(Long.parseLong(rs.getString("member_id")), rs.getString("username"),
+						rs.getInt("age"), rs.getString("team_name")));
+		
+	    return new PageImpl<MemberDto>(members, page, jdbcTemplate.queryForObject("select count(*) from member", Integer.class));
+	}
 }
