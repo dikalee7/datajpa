@@ -2,6 +2,7 @@ package myone.datajpa.repository.custom;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -52,8 +53,6 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
 
 	@Override
 	public List<MemberDto> findAllJdbcTemplateSort(Sort sort) {
-		Order order = sort.toList().get(0);
-
 		StringBuffer query = new StringBuffer();
 		query.append(" select");
 		query.append("  m.member_id as member_id,");
@@ -63,7 +62,20 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
 		query.append(" from member m");
 		query.append(" left outer join team t");
 		query.append("    on m.team_id=t.team_id");
-		query.append(" order by " + order.getProperty() + " " + order.getDirection().name());
+		
+		if(!sort.isUnsorted()) {
+			query.append(" order by ");
+			
+			for (Iterator<Order> iterator = sort.toList().iterator(); iterator.hasNext();) {
+				Order order = (Order) iterator.next();
+				query.append(" " + order.getProperty() + " " + order.getDirection().name());
+				if(iterator.hasNext())query.append(", ");
+			}
+//			sort.toList().forEach(order -> {
+//				query.append(" " + order.getProperty() + " " + order.getDirection().name());
+//			});
+		} 
+		
 		return this.jdbcTemplate.query(query.toString(),
 				(rs, rowNum) -> new MemberDto(Long.parseLong(rs.getString("member_id")), rs.getString("username"),
 						rs.getInt("age"), rs.getString("team_name")));

@@ -40,12 +40,13 @@ class PagingSortTest {
 		initData();
 		
 		// By user name in descending order
-	    Sort sort = Sort.by(Direction.fromString("DESC"), "USERNAME");
+		Sort sort1 = Sort.by("username").descending();
+		Sort sort2 = Sort.by("member_id").ascending();
+	    Sort sortAll = sort1.and(sort2);
 	    
 	    // Sorted Members
-	    List<MemberDto> sortedMembers = memberRepository.findAllJdbcTemplateSort(sort);
+	    List<MemberDto> sortedMembers = memberRepository.findAllJdbcTemplateSort(sortAll);
 	    sortedMembers.forEach(member -> System.out.println(member));
-	    
 	}
 	
 	@Test
