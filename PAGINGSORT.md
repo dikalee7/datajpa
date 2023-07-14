@@ -1,13 +1,13 @@
 # Pagination and sorting 
 
-- Spring Data Core
+> Spring Data Core
   - org.springframework.data.domain package 이용
     - spring-data-commons dependency 필요
     - 스프링 데이터 코어 기능으로 JPA, Jdbc Template, MyBatis 등 어느곳에서든 사용가능 
   - org.springframework.boot:spring-boot-starter-data-jpa 
     - spring-data-commons 포함되어 있음
     
-- 주 사용 클래스
+> 주 사용 클래스
   - org.springframework.data.domain.Sort
   - org.springframework.data.domain.PageRequest
   - org.springframework.data.domain.Pageable
@@ -30,63 +30,55 @@
   ```
   
   - JdbcTemplate 
-
-
-
-
-
-   
-```
+  ```
 	@Test
 	void sort() {
-		initData();
-		
-		// Java에서 직접 Sort 정보 생성 시
-		Sort sort1 = Sort.by("username").ascending();
-		Sort sort2 = Sort.by("member_id").descending();
-		Sort sortAll = sort1.and(sort2);
+          initData();
+
+          // Java에서 직접 Sort 정보 생성 시
+          Sort sort1 = Sort.by("username").ascending();
+          Sort sort2 = Sort.by("member_id").descending();
+          Sort sortAll = sort1.and(sort2);
 	    
-	    // Sorted Members
-	    List<MemberDto> sortedMembers = memberRepository.findAllJdbcTemplateSort(sortAll);
-	    sortedMembers.forEach(member -> System.out.println(member));
+          // Sorted Members
+          List<MemberDto> sortedMembers = memberRepository.findAllJdbcTemplateSort(sortAll);
+          sortedMembers.forEach(member -> System.out.println(member));
 	}
 	
 	//Web에서 호출 시 {host}:{port}/members/jdbctemplate?sort=member_id,desc&sort=username,asc
 	@GetMapping("/members/jdbctemplate")
 	public List<MemberDto> list(Sort sort) {
-		return memberRepository.findAllJdbcTemplateSort(sort);
+          return memberRepository.findAllJdbcTemplateSort(sort);
 	}
 	
 	@Override
 	public List<MemberDto> findAllJdbcTemplateSort(Sort sort) {
-		StringBuffer query = new StringBuffer();
-		query.append(" select");
-		query.append("  m.member_id as member_id,");
-		query.append("  m.username as username,");
-		query.append("  m.age as age,");
-		query.append("  t.name as team_name");
-		query.append(" from member m");
-		query.append(" left outer join team t");
-		query.append("    on m.team_id=t.team_id");
+          StringBuffer query = new StringBuffer();
+          query.append(" select");
+          query.append("  m.member_id as member_id,");
+          query.append("  m.username as username,");
+          query.append("  m.age as age,");
+          query.append("  t.name as team_name");
+          query.append(" from member m");
+          query.append(" left outer join team t");
+          query.append("    on m.team_id=t.team_id");
 
-		if (!sort.isUnsorted()) {
-			query.append(" order by ");
+          if (!sort.isUnsorted()) {
+            query.append(" order by ");
+            for (Iterator<Order> iterator = sort.toList().iterator(); iterator.hasNext();) {
+              Order order = (Order) iterator.next();
+              query.append(" " + order.getProperty() + " " + order.getDirection().name());
+              if (iterator.hasNext()) query.append(", ");
+            }
+          }
 
-			for (Iterator<Order> iterator = sort.toList().iterator(); iterator.hasNext();) {
-				Order order = (Order) iterator.next();
-				query.append(" " + order.getProperty() + " " + order.getDirection().name());
-				if (iterator.hasNext())
-					query.append(", ");
-			}
-		}
-
-		return this.jdbcTemplate.query(query.toString(),
-				(rs, rowNum) -> new MemberDto(Long.parseLong(rs.getString("member_id")), rs.getString("username"),
-						rs.getInt("age"), rs.getString("team_name")));
+          return this.jdbcTemplate.query(query.toString(),
+              (rs, rowNum) -> new MemberDto(Long.parseLong(rs.getString("member_id")), rs.getString("username"),
+                   rs.getInt("age"), rs.getString("team_name")));
 	}
 	
-```
-- Paging and Sort
+  ```
+  - Paging and Sort
   -  이용
   ```
 	public Page<MemberDto> findAllPageable(Pageable page) {
