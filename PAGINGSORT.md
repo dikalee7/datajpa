@@ -77,14 +77,7 @@
 	}
   ```
 
-- OPTIMISTIC_FORCEJNCREMENT
-  - Entity를 수정하지 않아도 버전을 강제로 증가시킴
-  - 연관관계에 있는 다른곳이 수정되었어도 해당 Entity가 버전업 되어야 한다면 사용
-  ```
-  @Query("select m from Member m")
-  @Lock(LockModeType.OPTIMISTIC_FORCEJNCREMENT)
-  Optional<Member> findByIdForUpdate(Long id);
-  ```
+
 <br>
 
 
