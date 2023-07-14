@@ -39,7 +39,7 @@ class PagingSortTest {
 	void sort() {
 		initData();
 		
-		// By user name in descending order
+		// set Sort
 		Sort sort1 = Sort.by("username").descending();
 		Sort sort2 = Sort.by("member_id").ascending();
 	    Sort sortAll = sort1.and(sort2);
@@ -53,11 +53,16 @@ class PagingSortTest {
 	void paging() {
 		initData();
 		
-		// By user name in descending order
-	    PageRequest pageable = PageRequest.of(0, 5, Direction.fromString("DESC"), "USERNAME");
+		// set Sort
+		Sort sort1 = Sort.by("username").descending();
+		Sort sort2 = Sort.by("member_id").ascending();
+	    Sort sortAll = sort1.and(sort2);
+	    
+		PageRequest pageable = PageRequest.of(0, 5, sortAll);
 	    
 	    // Paged and Sorted Members
 	    Page<MemberDto> pagedMembers = memberRepository.findAllPageable(pageable);
+	    System.out.println(pagedMembers.getPageable());
 	}
 
 	private void initData() {

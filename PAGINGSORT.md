@@ -17,12 +17,12 @@
 <br>
 
 
-> Sort 사용 예
+> Sort
   - Spring Data Jpa
   - org.springframework.data.domain.Sort를 파라미터값으로 전달해주기만 하면 됨
   
   ```
-    //Web에서 호출 시 {host}:{port}/members/jdbctemplate?sort=member_id,desc&sort=username,asc
+    //Web에서 호출 시 {host}:{port}/sortedmembers?sort=id,desc&sort=username,asc
     @GetMapping("/sortedmembers")
     public List<MemberDto> sortedList(Sort sort) {
       return memberRepository.findAll(sort).stream().map(member->new MemberDto(member.getId(), member.getUsername(), member.getAge(), null)).toList();
@@ -30,6 +30,7 @@
   ```
   
   - JdbcTemplate 
+  
   ```
 	@Test
 	void sort() {
@@ -78,12 +79,54 @@
 	}
 	
   ```
-  - Paging and Sort
-  -  이용
+
+<br>
+
+> Paging
+  - Spring Data Jpa
+  - org.springframework.data.domain.Pageable을 파라미터값으로 전달해주기만 하면 됨
+  
   ```
-	public Page<MemberDto> findAllPageable(Pageable page) {
-		Order order = !page.getSort().isEmpty() ? page.getSort().toList().get(0) : Order.by("ID");
+    //Web에서 호출 시 {host}:{port}/members?page=0&size=10&sort=id,desc&sort=username,desc
+	public Page<MemberDto> list(Pageable pageable) {
+		Page<Member> pages = memberRepository.findAll(pageable);
+		return getPage(pages, pageable,  member -> new MemberDto(member.getId(), member.getUsername(), member.getAge(), null));
+	}
+
+	// List to Page
+	private <T, M> PageImpl<T> getPage(Page<M> pages, Pageable pageable , Function<M, T> mapper) {
+		return new PageImpl<T>(
+				pages.getContent().stream().map(mapper).collect(Collectors.toList()), 
+				pageable, 
+				pages.getTotalElements());
+	}
+  ```
+  
+  - JdbcTemplate
+   
+  ```
+	@Test
+	void paging() {
+		initData();
 		
+		// set Sort
+		Sort sort1 = Sort.by("username").descending();
+		Sort sort2 = Sort.by("member_id").ascending();
+	    Sort sortAll = sort1.and(sort2);
+	    
+		PageRequest pageable = PageRequest.of(0, 5, sortAll);
+	    
+	    // Paged and Sorted Members
+	    Page<MemberDto> pagedMembers = memberRepository.findAllPageable(pageable);
+	}
+	
+	//Web에서 호출 시 {host}:{port}/paging/jdbctemplate?page=1&size=5&sort=member_id,asc&sort=username,desc
+	@GetMapping("/paging/jdbctemplate")
+	public Page<MemberDto> listPaging(Pageable pageable) {
+		return memberRepository.findAllPageable(pageable);
+	}
+	
+	public Page<MemberDto> findAllPageable(Pageable page) {
 		StringBuffer query = new StringBuffer();
 		query.append(" select");
 		query.append("  m.member_id as member_id,");
@@ -93,7 +136,19 @@
 		query.append(" from member m");
 		query.append(" left outer join team t");
 		query.append("    on m.team_id=t.team_id");
-		query.append(" order by " + order.getProperty() + " " + order.getDirection().name() + " LIMIT " + page.getPageSize() + " OFFSET " + page.getOffset());
+		
+		Sort sort = page.getSort();
+		if (!sort.isUnsorted()) {
+			query.append(" order by ");
+
+			for (Iterator<Order> iterator = sort.toList().iterator(); iterator.hasNext();) {
+				Order order = (Order) iterator.next();
+				query.append(" " + order.getProperty() + " " + order.getDirection().name());
+				if (iterator.hasNext())
+					query.append(", ");
+			}
+		}
+		query.append(" LIMIT " + page.getPageSize() + " OFFSET " + page.getOffset());
 		
 		
 		List<MemberDto> members = jdbcTemplate.query(query.toString(),
@@ -102,20 +157,4 @@
 		
 	    return new PageImpl<MemberDto>(members, page, jdbcTemplate.queryForObject("select count(*) from member", Integer.class));
 	}
-	
-	@Test
-	void paging() {
-		initData();
-		
-		// By user name in descending order
-	    PageRequest pageable = PageRequest.of(0, 5, Direction.fromString("DESC"), "USERNAME");
-	    
-	    // Paged and Sorted Members
-	    Page<MemberDto> pagedMembers = memberRepository.findAllPageable(pageable);
-	}
   ```
-
-
-<br>
-
-

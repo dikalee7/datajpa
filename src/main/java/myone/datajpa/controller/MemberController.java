@@ -1,10 +1,14 @@
 package myone.datajpa.controller;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,16 +43,31 @@ public class MemberController {
 		return memberRepository.findAllJdbcTemplateSort(sort);
 	}
 	
+	@GetMapping("/paging/jdbctemplate")
+	public Page<MemberDto> listPaging(Pageable pageable) {
+		return memberRepository.findAllPageable(pageable);
+	}
+	
 	@GetMapping("/sortedmembers")
 	public List<MemberDto> sortedL(Sort sort) {
 		return memberRepository.findAll(sort).stream().map(member->new MemberDto(member.getId(), member.getUsername(), member.getAge(), null)).toList();
 	}
 	
+
 	@GetMapping("/members")
-	public Page<Member> list(Pageable pageable) {
-		return memberRepository.findAll(pageable);
+	public Page<MemberDto> list(Pageable pageable) {
+		Page<Member> pages = memberRepository.findAll(pageable);
+		return getPage(pages, pageable,  member -> new MemberDto(member.getId(), member.getUsername(), member.getAge(), null));
 	}
-	
+
+	// List to Page
+	private <T, M> PageImpl<T> getPage(Page<M> pages, Pageable pageable , Function<M, T> mapper) {
+		return new PageImpl<T>(
+				pages.getContent().stream().map(mapper).collect(Collectors.toList()), 
+				pageable, 
+				pages.getTotalElements());
+	}
+
 	@PostConstruct
 	public void init() {
 		for (int i = 0; i < 100; i++) {
