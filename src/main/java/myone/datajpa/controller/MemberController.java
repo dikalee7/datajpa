@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -65,7 +64,7 @@ public class MemberController {
 		Page<Member> pages = memberRepository.findAll(pageable);
 		return getPage(pages, pageable,  member -> new MemberDto(member.getId(), member.getUsername(), member.getAge(), null));
 	}
-
+	
 	// List to Page
 	private <T, M> PageImpl<T> getPage(Page<M> pages, Pageable pageable , Function<M, T> mapper) {
 		return new PageImpl<T>(
@@ -73,6 +72,16 @@ public class MemberController {
 				pageable, 
 				pages.getTotalElements());
 	}
+	
+	@GetMapping("members2")
+	public Page<MemberDto> listMemberDto(@PageableDefault(size = 5) @SortDefaults({
+		@SortDefault(sort = {"id"}, direction = Sort.Direction.DESC),
+		@SortDefault(sort = {"username"}, direction = Sort.Direction.DESC)
+	}) Pageable pageable) {
+		return memberRepository.findAll(pageable).map(MemberDto::new);
+	}
+
+	
 
 	@PostConstruct
 	public void init() {

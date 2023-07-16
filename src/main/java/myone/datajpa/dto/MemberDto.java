@@ -1,6 +1,10 @@
 package myone.datajpa.dto;
 
+import java.util.Optional;
+
 import lombok.Data;
+import myone.datajpa.entity.Member;
+import myone.datajpa.entity.Team;
 
 @Data
 public class MemberDto {
@@ -14,5 +18,12 @@ public class MemberDto {
 		this.username = username;
 		this.age = age;
 		this.teamName = teamName;
+	}
+	
+	public MemberDto(Member member) {
+		this.id = member.getId();
+		this.username = member.getUsername();
+		this.age = member.getAge();
+		this.teamName = Optional.ofNullable(member.getTeam()).orElseGet(()->Team.createTeam().build()).getName();
 	}
 }
