@@ -15,8 +15,10 @@
   - Default implementation of the {@link org.springframework.data.repository.CrudRepository} interface
 - save New 판단 기준
   - Entity의 Key가 되는 값의 NULL 체크로 판단함
-  - 때문에, @GeneratedValue의 경우에는 무관하나 직접 키값을 정의해야하는 Entity의 경우에는  org.springframework.data.domain.Persistable 인터페이스를 상속받아 `override메소드 isNew`를 재정의해주어야 함 
-
+  - 때문에, @GeneratedValue의 경우에는 무관하나 직접 키값을 정의해야하는 Entity의 경우에는 NULL이 아니므로 save 함수의 persist가 아닌 merge 로직을 수행하며,
+  - 결과적으로는 데이터는 insert되지만 insert 이전에 불필요한 select문이 발생하여 비효율적임
+  - 해결책 ->  org.springframework.data.domain.Persistable 인터페이스를 상속받아 `override메소드 isNew`를 재정의해주어야 함
+  
   ```
   @Entity
   @Getter
