@@ -12,7 +12,10 @@
 
 > Spring Data Jpa 구현체
 - org.springframework.data.jpa.repository.support.SimpleJpaRepository
-  - Default implementation of the {@link org.springframework.data.repository.CrudRepository} interface 
+  - Default implementation of the {@link org.springframework.data.repository.CrudRepository} interface
+- save시 New 판단 기준
+  - Entity의 Key가 되는 값의 NULL 체크로 판단함
+  - 때문에, @GeneratedValue의 경우에는 무관하나 직접 키값을 정의해야하는 Entity의 경우에는  org.springframework.data.domain.Persistable 인터페이스를 상속받아 `override isNew 메소드`를 재정의해주어야 함 
 <br>
 
 
