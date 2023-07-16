@@ -11,6 +11,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
+import org.springframework.data.web.SortDefault.SortDefaults;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,7 +58,10 @@ public class MemberController {
 	
 
 	@GetMapping("/members")
-	public Page<MemberDto> list(Pageable pageable) {
+	public Page<MemberDto> list(@PageableDefault(size = 5) @SortDefaults({
+		@SortDefault(sort = {"id"}, direction = Sort.Direction.DESC),
+		@SortDefault(sort = {"username"}, direction = Sort.Direction.DESC)
+	}) Pageable pageable) {
 		Page<Member> pages = memberRepository.findAll(pageable);
 		return getPage(pages, pageable,  member -> new MemberDto(member.getId(), member.getUsername(), member.getAge(), null));
 	}
