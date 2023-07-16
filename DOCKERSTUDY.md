@@ -21,13 +21,52 @@ services:
 volumes:
   db_data:
 ```
+<br>
+
+> Postgresql Create User
+
+```
+CREATE USER name [ [ WITH ] option [ ... ] ]
+
+where option can be:
+
+      SUPERUSER | NOSUPERUSER
+    | CREATEDB | NOCREATEDB
+    | CREATEROLE | NOCREATEROLE
+    | INHERIT | NOINHERIT
+    | LOGIN | NOLOGIN
+    | REPLICATION | NOREPLICATION
+    | BYPASSRLS | NOBYPASSRLS
+    | CONNECTION LIMIT connlimit
+    | [ ENCRYPTED ] PASSWORD 'password' | PASSWORD NULL
+    | VALID UNTIL 'timestamp'
+    | IN ROLE role_name [, ...]
+    | IN GROUP role_name [, ...]
+    | ROLE role_name [, ...]
+    | ADMIN role_name [, ...]
+    | USER role_name [, ...]
+    | SYSID uid
+```
+
+<br>
 
 > Postgresql Database with user
 
 ```
-CREATE DATABASE {dbname} 
-WITH 
-   ENCODING = 'UTF8'
-   OWNER = {username}
-   CONNECTION LIMIT = 100;
+CREATE DATABASE name
+    [ WITH ] [ OWNER [=] user_name ]
+           [ TEMPLATE [=] template ]
+           [ ENCODING [=] encoding ]
+           [ STRATEGY [=] strategy ] ]
+           [ LOCALE [=] locale ]
+           [ LC_COLLATE [=] lc_collate ]
+           [ LC_CTYPE [=] lc_ctype ]
+           [ ICU_LOCALE [=] icu_locale ]
+           [ LOCALE_PROVIDER [=] locale_provider ]
+           [ COLLATION_VERSION = collation_version ]
+           [ TABLESPACE [=] tablespace_name ]
+           [ ALLOW_CONNECTIONS [=] allowconn ]
+           [ CONNECTION LIMIT [=] connlimit ]
+           [ IS_TEMPLATE [=] istemplate ]
+           [ OID [=] oid ]
 ```
