@@ -10,6 +10,12 @@
 <br>
 
 
+> Spring Data Jpa 구현체
+- org.springframework.data.jpa.repository.support.SimpleJpaRepository
+  - Default implementation of the {@link org.springframework.data.repository.CrudRepository} interface 
+<br>
+
+
 > JPA Entity에 기본 생성자가 필요한 이유   
  - 데이터를 DB에서 조회해 온 뒤 객체를 생성할 때 Java Reflection을 사용
  - Reflection은 클래스 이름만 알면 생성자, 필드, 메서드 등 클래스의 모든 정보에 접근이 가능 하지만 생성자의 매개변수는 알 수 없기때문에 기본 생성자로 객체를 생성하고 필드 값을 강제로 매핑해주는 방식을 사용
