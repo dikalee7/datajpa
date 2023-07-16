@@ -3,6 +3,7 @@
 > Postgresql DB 도커 생성 및 데이터 유지되도록 설정
 - docker compose 및 volume 이용
 - docker-compose.yml 작성
+  - docker compose up
   
 ```
 version: "1"
