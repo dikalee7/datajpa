@@ -315,6 +315,7 @@ List<Member> findAllMembers();
 > 그외 기능들
 - Specifications (명세)
   - JPA Criteria를 활용하여 제공
+    - 실무에서는 사용되지 않음 QueryDSL을 사용함, 아래 내용은 참고만 할 것
   - 명세 기능 사용법 : repository interface에서 org.springframework.data.jpa.repository.JpaSpecificationExecutor 상속
   
   ```
