@@ -310,3 +310,10 @@ List<Member> findAllMembers();
 
 > Pagination and Sort
 - PAGINGSORT.md
+<br>
+
+> 그외 기능들
+- Specifications (명세)
+  - JPA Criteria를 활용하여 제공
+  - 명세 기능 사용법 : repository interface에서 org.springframework.data.jpa.repository.JpaSpecificationExecutor 상속
+  - org.springframework.data.jpa.domain.Specification 클래스로 명세 정의
