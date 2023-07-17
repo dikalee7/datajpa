@@ -345,3 +345,32 @@ List<Member> findAllMembers();
 	}
   }  
   ```
+
+  ```
+	@Test
+	void specTest() {
+		Team teamA = Team.createTeam().name("teamA").build();
+		em.persist(teamA);
+
+		Member member1 = Member.createMember().username("dikalee1").age(0).build();
+		Member member2 = Member.createMember().username("dikalee2").age(0).build();
+		// 팀설정
+		member1.applyTeam(teamA);
+		member2.applyTeam(teamA);
+
+		em.persist(member1);
+		em.persist(member2);
+
+		em.flush();
+		em.clear();
+
+		Specification<Member> specUsername = MemberSpec.username("dikalee1");
+		Specification<Member> specTeamname = MemberSpec.teamName("teamA");
+
+		// username과 팀 name을 and 조건으로 검색
+		List<Member> result = memberRepository.findAll(specUsername.and(specTeamname));
+
+		assertThat(result.size()).isEqualTo(1);
+
+	}
+  ```
