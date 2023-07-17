@@ -429,3 +429,46 @@ List<Member> findAllMembers();
 		assertThat(result.size()).isEqualTo(1);
 	}
   ```
+<br>
+
+> Projections
+- 엔티티 대신에 DTO를 편리하게 조회할 때 사용
+
+  ```
+  public interface UsernameOnly {
+    String getUsername();
+    String getAge();
+  }
+
+  public interface MemberRepository ... {
+   List<UsernameOnly> findProjectionsByUsername(String username);
+  }
+
+	@Test
+	public void projections() throws Exception {
+		Team teamA = Team.createTeam().name("teamA").build();
+		em.persist(teamA);
+
+		Member member1 = Member.createMember().username("dikaleeA").age(0).build();
+		Member member2 = Member.createMember().username("dikaleeB").age(0).build();
+		// 팀설정
+		member1.applyTeam(teamA);
+		member2.applyTeam(teamA);
+
+		em.persist(member1);
+		em.persist(member2);
+
+		em.flush();
+		em.clear();
+
+		List<UsernameOnly> result = memberRepository.findProjectionsByUsername("dikaleeB");
+		
+		result.forEach(t -> {
+			System.out.println(t.getUsername());
+			System.out.println(t.getAge());
+		});
+		
+		assertThat(result.size()).isEqualTo(1);
+	}
+
+  ```
