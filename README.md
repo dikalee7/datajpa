@@ -316,4 +316,32 @@ List<Member> findAllMembers();
 - Specifications (명세)
   - JPA Criteria를 활용하여 제공
   - 명세 기능 사용법 : repository interface에서 org.springframework.data.jpa.repository.JpaSpecificationExecutor 상속
+  
+  ```
+  public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom
+      , JpaSpecificationExecutor<Member>{
+  }
+  ```
+  
   - org.springframework.data.jpa.domain.Specification 클래스로 명세 정의
+  - MemberSpec 명세 정의 코드
+    
+  ```
+  public class MemberSpec {
+	public static Specification<Member> teamName(final String teamName) {
+		return (Specification<Member>) (root, query, builder) -> {
+			if (!StringUtils.hasText(teamName)) {
+				return null;
+			}
+			Join<Member, Team> t = root.join("team", JoinType.INNER); 
+			return builder.equal(t.get("name"), teamName);
+		};
+	}
+
+	public static Specification<Member> username(final String username) {
+		// Specification interface 구현 toPredicate
+		// 구현 메소드가 하나만 존재하면 아래와 같이 람다식으로 표현 가능
+		return (Specification<Member>) (root, query, builder) -> builder.equal(root.get("username"), username);
+	}
+  }  
+  ```
