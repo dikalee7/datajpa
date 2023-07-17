@@ -433,9 +433,13 @@ List<Member> findAllMembers();
 
 > Projections
 - 엔티티 대신에 DTO를 편리하게 조회할 때 사용
+- 인터페이스 기반 Closed Projections
+- 프로퍼티 형식(getter)의 인터페이스를 제공하면, 구현체는 스프링 데이터 JPA가 제공
+- SpEL문법을 사용하면, DB에서 엔티티 필드를 다 조회해온 다음에 계산, 따라서 JPQL SELECT 절 최적화가 안된다.
 
   ```
   public interface UsernameOnly {
+    @Value("#{target.username + ' ' + target.age + ' ' + target.team.name}")  //스프링의 SpEL 문법도 지원
     String getUsername();
     String getAge();
   }
@@ -472,3 +476,47 @@ List<Member> findAllMembers();
 	}
 
   ```
+
+- 클래스 기반 Projection
+  - 인터페이스가 아닌 구체적인 DTO 형식도 가능
+  - 생성자의 파라미터 이름으로 매칭
+
+  ```
+  public class UsernameOnlyDto {
+   private final String username;
+   public UsernameOnlyDto(String username) {
+     this.username = username;
+   }
+   public String getUsername() {
+     return username;
+   }
+  }  
+  ```
+
+- 동적 Projections
+  - Generic type을 주면, 동적으로 프로젝션 데이터 번경 가능
+
+  ```
+  <T> List<T> findProjectionsByUsername(String username, Class<T> type);
+
+  // 사용코드
+  List<UsernameOnly> result = memberRepository.findProjectionsByUsername("dikaleeB", UsernameOnly.class);
+  ```
+
+- 중첩 구조 처리
+
+  ```
+  public interface NestedClosedProjection {
+   String getUsername();
+   TeamInfo getTeam();
+   interface TeamInfo {
+     String getName();
+   }
+  }
+  ```
+  
+  - 프로젝션 대상이 root 엔티티면, JPQL SELECT 절 최적화 가능
+  - 프로젝션 대상이 ROOT가 아니면 LEFT OUTER JOIN 처리, 모든 필드를 SELECT해서 엔티티로 조회한 다음에 계산
+  - 프로젝션 대상이 root 엔티티를 넘어가면 JPQL SELECT 최적화가 안됨
+  - 실무의 복잡한 쿼리를 해결하기에는 한계
+  -  QueryDSL을 사용하자
