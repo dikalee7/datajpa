@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,10 +19,11 @@ import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 
 import myone.datajpa.dto.MemberDto;
+import myone.datajpa.dto.UsernameOnly;
 import myone.datajpa.entity.Member;
 import myone.datajpa.repository.custom.MemberRepositoryCustom;
 
-public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom{
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom, JpaSpecificationExecutor<Member>{
 	
 	@Query(value = "select m from Member m left join fetch m.team")
 	List<Member> findAllFetch();
@@ -73,5 +75,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 	@Query("select m from Member m")
 	@Lock(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
 	Optional<Member> findByIdForUpdate(Long id);
+	
+	List<UsernameOnly> findProjectionsByUsername(String username);
 	
 }
