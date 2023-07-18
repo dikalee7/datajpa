@@ -83,11 +83,8 @@ class MemberRepositoryTest {
 		// fetch join list
 		List<Member> findAllFech = memberRepository.findAllFetch();
 		for (Member member : findAllFech) {
-			Optional.ofNullable(member.getTeam()).ifPresentOrElse(v -> {
-				System.out.println(member.getUsername() + " :: " + v.getName());
-			}, () -> {
-				System.out.println(member.getUsername() + " :: no team");
-			});
+			Team team = Optional.ofNullable(member.getTeam()).orElse(Team.createTeam().build());
+			System.out.println(member.getUsername() + " :: " + team.getName());
 		}
 	}
 	

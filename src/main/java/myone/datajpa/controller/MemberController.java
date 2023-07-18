@@ -52,7 +52,7 @@ public class MemberController {
 	
 	@GetMapping("/sortedmembers")
 	public List<MemberDto> sortedL(Sort sort) {
-		return memberRepository.findAll(sort).stream().map(member->new MemberDto(member.getId(), member.getUsername(), member.getAge(), null)).toList();
+		return memberRepository.findAll(sort).stream().map(member->new MemberDto(member.getId(), member.getUsername(), member.getAge(), null)).collect(Collectors.toList());
 	}
 	
 
