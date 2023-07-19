@@ -5,9 +5,9 @@ spring:
     livereload:
       enabled: 'true'
   datasource:
-    url: jdbc:postgresql://localhost:5432/basicdb
-    username: dikalee
-    password: d09209233!
+    url: ENC(+WBVIYuofWzJNpo3a1xmOdjDWeQLNdSyrT1hQN2C74gRUe5MK/kflrbGVt1ur3UPm7l1JjItgog=)
+    username: ENC(cwRDmf16XqXutkGk6Ld+DA==)
+    password: ENC(DvaSrXsme1EV77m+X/ncxeS2w51NoWiD)
     driver-class-name: org.postgresql.Driver
   jpa:
     database: postgresql
@@ -29,5 +29,5 @@ logging.level:
   root: info
   '[myone.apijpa]': debug
   '[org.hibernate.SQL]': debug
-  '[org.hibernate.type]': trace
+#  '[org.hibernate.type]': trace
 
