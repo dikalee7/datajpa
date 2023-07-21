@@ -122,6 +122,22 @@
   .where(member.username.eq("querydsl1_0000").and(member.age.eq(10)))
   ```
 
-  - 검색조건
-  - 
+- 검색조건
+    
+|검색조건|예시|실행|
+|------|---|---|
+|eq|member.username.eq("member1")|username = 'member1'|
+|ne|member.username.ne("member1")|username != 'member1'|
+|eq not()|member.username.eq("member1").not()|username != 'member1'|
+|isNotNull|member.username.isNotNull()|username is not null|		
+|in|member.age.in(10, 20)|age in (10,20)|		
+|notIn|member.age.notIn(10, 20)|age not in (10, 20)|
+|between|member.age.between(10,30)|between 10, 30|
+|goe|member.age.goe(30)|age >= 30|
+|gt|member.age.gt(30)|age > 30|
+|loe|member.age.loe(30)|age <= 30|
+|lt|member.age.lt(30)|age < 30|
+|like|member.username.like("member%")|like 'member%' 검색|
+|contains|member.username.contains("member")|like '%member%' 검색|
+|startsWith|member.username.startsWith("member")|like 'member%' 검색|
   
