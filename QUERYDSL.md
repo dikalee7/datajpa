@@ -119,7 +119,10 @@
 				.fetchOne();
 
   // username이 "querydsl1_0000"이고 age가 10인 조건문
-  .where(member.username.eq("querydsl1_0000").and(member.age.eq(10)))
+  where(member.username.eq("querydsl1_0000").and(member.age.eq(10)))
+
+  // and 조건만 존재한다면 where에 `Predicate... o` 방식의 parameter로 넘겨도 됨
+  where(member.username.eq("querydsl1_0000"), member.age.eq(10))
   ```
 
 - 검색조건
