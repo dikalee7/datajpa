@@ -71,7 +71,7 @@
   // 1. 별칭 직접 지정
   QMember qMember = new QMember("m");
 
-  // 2. 기본 인스턴스 사용
+  // 2. 기본 인스턴스 사용 => static import를 사용하면 좀더 깔끔하게 사용할 수 있
   QMember qMember = QMember.member; 
   ```
 
@@ -80,6 +80,9 @@
 > 기본 select
 
   ```
+    //import 사용 
+    import myone.datajpa.entity.QMember;
+
 	@Test
 	public void basicSelectExam() {
 		String strUsername = "querydsl1_0000";
@@ -87,6 +90,19 @@
 		QMember qMember = QMember.member;
 		Member findMember = queryFactory.selectFrom(qMember)
 				.where(qMember.username.eq(strUsername))
+				.fetchOne();
+		assertThat(findMember.getUsername()).isEqualTo(strUsername);
+	}
+
+    //static import 사용 
+    import static myone.datajpa.entity.QMember.member;
+
+	@Test
+	public void basicSelectExam() {
+		String strUsername = "querydsl1_0000";
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+		Member findMember = queryFactory.selectFrom(member)
+				.where(member.username.eq(strUsername))
 				.fetchOne();
 		assertThat(findMember.getUsername()).isEqualTo(strUsername);
 	}
