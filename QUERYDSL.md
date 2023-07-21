@@ -63,6 +63,17 @@
     exclude '**/*'
   }
   ```
+<br>
+
+> Q클래스 인스턴스 사용법
+  
+  ```
+  // 1. 별칭 직접 지정
+  QMember qMember = new QMember("m");
+
+  // 2. 기본 인스턴스 사용
+  QMember qMember = QMember.member; 
+  ```
 
 <br>
 
