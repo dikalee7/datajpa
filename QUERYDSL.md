@@ -154,3 +154,21 @@
 - fetchFirst() : limit(1).fetchOne()
 - fetchResults() : 페이징 정보 포함, total count 쿼리 추가 실행
 - fetchCount() : count 쿼리로 변경해서 count 수 조회
+
+<br>
+
+> 정렬
+- desc() , asc() : 일반 정렬
+- nullsLast() , nullsFirst() : null 데이터 순서 부여
+
+  ```
+	/**
+	 * 회원 정렬 순서 1. 회원 나이 내림차순(desc) 2. 회원 이름 올림차순(asc) 단 2에서 회원 이름이 없으면 마지막에 출력(nulls last) 
+	 */
+	@Test
+	public void sort() {
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+		List<Member> result = queryFactory.selectFrom(member)
+				.orderBy(member.age.desc(), member.username.asc().nullsLast()).fetch();
+	}
+  ```
