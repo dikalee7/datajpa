@@ -109,5 +109,19 @@
 		assertThat(findMember.getUsername()).isEqualTo(strUsername);
 	}
   ```
+
 - 조건문 JPAQueryFactory의 where안에 체인형태로 지정
-  - username이 "querydsl1_0000"인 조건문 : where(member.username.eq("querydsl1_0000"))
+
+  ```
+  // username이 "querydsl1_0000"인 조건문
+  Member findMember = queryFactory.selectFrom(member)
+				.where(member.username.eq("querydsl1_0000"))
+				.fetchOne();
+
+  // username이 "querydsl1_0000"이고 age가 10인 조건문
+  .where(member.username.eq("querydsl1_0000").and(member.age.eq(10)))
+  ```
+
+  - 검색조건
+  - 
+  
