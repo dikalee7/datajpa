@@ -63,4 +63,20 @@
     exclude '**/*'
   }
   ```
-  
+
+<br>
+
+> 기본 select
+
+  ```
+	@Test
+	public void basicSelectExam() {
+		String strUsername = "querydsl1_0000";
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+		QMember qMember = QMember.member;
+		Member findMember = queryFactory.selectFrom(qMember)
+				.where(qMember.username.eq(strUsername))
+				.fetchOne();
+		assertThat(findMember.getUsername()).isEqualTo(strUsername);
+	}
+  ```
